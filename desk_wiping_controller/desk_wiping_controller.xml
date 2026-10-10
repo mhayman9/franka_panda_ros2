@@ -1,0 +1,11 @@
+<library path="desk_wiping_controller">
+  <class
+    name="desk_wiping_controller/DeskWipingController"
+    type="desk_wiping_controller::DeskWipingController"
+    base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Hybrid Cartesian impedance and normal-force controller that wipes a
+      cross pattern on a table.
+    </description>
+  </class>
+</library>
