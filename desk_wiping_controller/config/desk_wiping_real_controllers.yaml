@@ -1,0 +1,51 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    franka_robot_state_broadcaster:
+      type: franka_robot_state_broadcaster/FrankaRobotStateBroadcaster
+
+    desk_wiping_controller:
+      type: desk_wiping_controller/DeskWipingController
+
+franka_robot_state_broadcaster:
+  ros__parameters:
+    arm_id: panda
+
+desk_wiping_controller:
+  ros__parameters:
+    arm_id: panda
+    center_xy: [0.65, 0.0]
+    forward_distance: 0.10
+    lateral_distance: 0.10
+    move_duration: 4.0
+    cross_segment_duration: 2.0
+    return_duration: 4.0
+    descent_speed: 0.02
+
+    # Cartesian position impedance.
+    Kp_xy: 300.0
+    Kd_xy: 34.64
+    Kp_z: 40.0
+    Kd_z: 12.65
+    Kp_orientation: 20.0
+    Kd_orientation: 8.94
+
+    # Projected joint-space impedance.
+    Kp_nullspace: 10.0
+    Kd_nullspace: 6.32
+    pseudoinverse_damping: 0.05
+    preferred_joint_position: [0.0, -0.785398, 0.0, -2.356194, 0.0, 1.570796, 0.785398]
+
+    # Z force controller.
+    # The real robot reports the contact force with the opposite sign.
+    force_sign: -1.0
+    desired_force: 6.0
+    contact_threshold: 3.0
+    force_ramp_duration: 1.5
+    Kp_force: 1.0
+    Kd_force: 10.0
+    force_filter_time_constant: 0.05
