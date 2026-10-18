@@ -1,8 +1,88 @@
+# Desk wiping with a Franka Panda
+
+This repository extends [multipanda_ros2](https://github.com/tenfoldpaper/multipanda_ros2)
+with a controller that makes a Franka Panda wipe a table, in simulation and on
+the real robot. It was developed by a group of three students in a robotics lab
+course at TUM.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+https://github.com/user-attachments/assets/42331973-228d-4220-9cc8-c7f4da57599c
+
+</td>
+<td width="50%" valign="top">
+
+https://github.com/user-attachments/assets/bfdaf27f-c347-42e2-89c5-b2e42d37de3f
+
+</td>
+</tr>
+<tr>
+<td align="center"><em>Real robot</em></td>
+<td align="center"><em>MuJoCo simulation</em></td>
+</tr>
+</table>
+
+The [`desk_wiping_controller`](./desk_wiping_controller) package contains the
+controller, a hybrid of Cartesian impedance and normal-force control, plus
+launch files and parameters for the simulation and the real robot. The
+simulation uses a MuJoCo scene with a table,
+`franka_description/mujoco/franka/desk_wiping_scene.xml`.
+
+## Quick start with Docker
+
+These steps are for Ubuntu 22.04 or 24.04. Everything except Docker, Git and
+the GitHub CLI runs inside a container.
+
+On the PC (once):
+
+```bash
+sudo apt install -y docker.io git gh
+sudo usermod -aG docker $USER    # then log out and back in
+gh auth login
+git clone --recurse-submodules https://github.com/mhayman9/franka_panda_ros2.git
+cd franka_panda_ros2
+./tools/setup_env                # builds the Docker image
+./run                            # creates the container and opens a shell in it
+```
+
+Inside the container:
+
+```bash
+cd ~/multipanda_ws
+colcon build --packages-up-to desk_wiping_controller
+source install/setup.bash
+ros2 launch desk_wiping_controller desk_wiping_sim.launch.py
+```
+
+To start the task, run `./run` again from the repository folder in a second
+terminal, then:
+
+```bash
+source ~/multipanda_ws/install/setup.bash
+ros2 control switch_controllers --activate desk_wiping_controller
+```
+
+After a reboot the container is stopped, and `./run` only attaches to a running
+one, so start it first with `docker start multipanda-container`. Always run
+`colcon build` inside the container, where ROS 2 Humble, MuJoCo and libfranka
+are installed.
+
+The [controller README](./desk_wiping_controller/README.md) explains how the
+controller works and how to run it on the real robot.
+
+The rest of this file is the original multipanda_ros2 README.
+
+---
+
 # multipanda_ros2
 ## A sim- and real Panda robot integration based on the `ros2_control` framework
-<img src="docs/images/single_sim.png" alt="" height="250">
-<img src="docs/images/dual_sim.png" alt=""   height="250">
-<img src="docs/images/garmi_sim.png" alt=""  height="250">
+<p>
+<img src="docs/images/single_sim.png" alt="" width="31%">
+<img src="docs/images/dual_sim.png" alt=""   width="31%">
+<img src="docs/images/garmi_sim.png" alt=""  width="34%">
+</p>
 
 This project implements most features from the original `franka_ros` repository in ROS2 Humble, specifically for the Franka Emika Robot (Panda).
 This project significantly expands upon the original `franka_ros2` from the company, who dropped the support for the Pandas.
